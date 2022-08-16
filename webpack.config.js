@@ -1,8 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TestPlugin = require('./plugins/TestPlugin');
+const BannerWebpackPlugin = require('./plugins/banner-webpack-plugin');
+const CleanwebpackPlugin = require('./plugins/clean-webpack-plugin');
+const AnalyzeWebpackPlugin = require('./plugins/analyze-wbpack-plugin');
+const InlinechunkWebpackPlugin = require('./plugins/inlinechunk-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     devtool: 'cheap-module-source-map',
     entry: './src/main.js',
     output: {
@@ -10,7 +15,7 @@ module.exports = {
         filename: 'js/[name][chunkhash:10].js',
         chunkFilename: 'js/[name][chunkhash:10].chunk.js',
         assetModuleFilename: 'media/[name][chunkhash:6][ext][query]',
-        clean: true
+        // clean: true
     },
     devServer: {
 		static: {
@@ -63,6 +68,21 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'template.html'),
             filename: 'index.html'
-        })
+        }),
+        // new TestPlugin(),
+        // new BannerWebpackPlugin({
+        //     author: 'zhangsan'
+        // }),
+        new CleanwebpackPlugin(),
+        new AnalyzeWebpackPlugin(),
+        new InlinechunkWebpackPlugin()
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        },
+        runtimeChunk: {
+            name: entry => `runtime-${entry.name}.js`
+        }
+    }
 }

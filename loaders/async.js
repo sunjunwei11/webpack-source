@@ -9,5 +9,5 @@ module.exports = function(content) {
             ${content}
             console.log('async ok');
         `);
-    }, 1000);
+    }, 100);
 }
